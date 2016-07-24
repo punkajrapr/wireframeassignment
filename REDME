@@ -1,0 +1,3 @@
+--> Give 777 permission to upload and csv folder inside public_html folder
+--> Need php_zip extension enable on server.
+--> Please change DB cedential in public_html/contant.php
