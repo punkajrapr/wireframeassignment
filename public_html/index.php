@@ -139,7 +139,7 @@ $_SESSION['checktime'] = $time;
 
 <span class='label label-warning' id="upload-file-info-error"></span>
     </div>
-        <button type="submit" class="btn btn-default">Submit</button>
+       
   </form></div>
        </div>
           
