@@ -3,10 +3,9 @@ ob_start();
 error_reporting(0);
 session_start();
 include 'database.php';
-
+$sessionId = session_id();
 $error = ""; //error holder
  
- $files = array('2.png','13592189_10153670853327765_1959899751804612407_n.jpg','GH.PNG');
 $file_folder = "uploads/"; // folder to load files
 if(extension_loaded('zip'))
 { 
@@ -32,7 +31,7 @@ foreach ($list as $line)
 
 
 
-$stmt = $conn->prepare("SELECT post_name, post_image FROM tbl_post"); 
+$stmt = $conn->prepare("SELECT post_name, post_image FROM tbl_post createdby = '".$sessionId."'"); 
 $stmt->execute();
 	
 $result = $stmt->setFetchMode(PDO::FETCH_ASSOC); 

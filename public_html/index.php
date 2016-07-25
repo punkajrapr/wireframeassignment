@@ -7,7 +7,7 @@
 ob_start();
 session_start();
 $sessionId = session_id();
-error_reporting(0);
+error_reporting(2);
 include 'database.php';
 
 $viewstmt = $conn->prepare("INSERT INTO tbl_session (session_id) 
@@ -15,7 +15,7 @@ $viewstmt = $conn->prepare("INSERT INTO tbl_session (session_id)
                               $viewstmt->bindParam(':session_id', $sessionId);
 $viewstmt->execute();
 
-$stmtAjax = $conn->prepare("SELECT 1 FROM tbl_post"); 
+$stmtAjax = $conn->prepare("SELECT 1 FROM tbl_post where createdby='".$sessionId."'"); 
 $stmtAjax->execute();
 $viewstmtAjax = $conn->prepare("SELECT 1 FROM tbl_session"); 
 $viewstmtAjax->execute();
@@ -32,10 +32,11 @@ $viewstmtAjax->execute();
                              
                              $imagetitle = $_POST['image-title'];
                              
-                              $stmt = $conn->prepare("INSERT INTO tbl_post (post_name, post_image) 
-                                        VALUES (:post_name, :post_image)");
+                              $stmt = $conn->prepare("INSERT INTO tbl_post (post_name, post_image, createdby) 
+                                        VALUES (:post_name, :post_image,:createdby)");
                               $stmt->bindParam(':post_name', $imagetitle);
                               $stmt->bindParam(':post_image', $filename);
+							  $stmt->bindParam(':createdby', $sessionId);
                               $stmt->execute();         
 				$message =  "The file ". $filename. " has been uploaded.";
 			} else {
@@ -52,7 +53,7 @@ $time = time();
 $_SESSION['checktime'] = $time;
 
 
-    $stmt = $conn->prepare("SELECT post_id, post_name, post_image FROM tbl_post"); 
+    $stmt = $conn->prepare("SELECT post_id, post_name, post_image FROM tbl_post where createdby='".$sessionId."'"); 
     $stmt->execute();
 
     // set the resulting array to associative
